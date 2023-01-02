@@ -21,8 +21,8 @@ io.on('connection', (socket) => {
         console.log('message: ' + message);
         io.emit('chat', message);
     });
-})
+});
 
 server.listen(3000, () => {
     console.log('Server connected at http://localhost:3000');
-})
+});
