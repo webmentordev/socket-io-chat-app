@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#messages{
+    @apply p-3
+}
+#messages li{
+    @apply bg-blue-500 p-5 text-sm rounded-bl-md leading-6 rounded-br-md rounded-tr-md shadow-lg max-w-lg text-white w-fit mb-3;
+}

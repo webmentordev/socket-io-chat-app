@@ -21,6 +21,9 @@ io.on('connection', (socket) => {
         console.log('message: ' + message);
         io.emit('chat', message);
     });
+    socket.on('typing', (check) => {
+        io.emit('typing', check);
+    });
 });
 
 server.listen(3000, () => {

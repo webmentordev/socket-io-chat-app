@@ -4,15 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Socket.Io | Chat App</title>
     <link rel="stylesheet" href="./app.css">
+    <link rel="shortcut icon" href="./chat.png" type="image/x-icon">
 </head>
-<body>
-    <ul id="messages"></ul>
-    <form id="form" class="fixed flex bottom-0 w-full bg-gray-200 p-3">
+<body class="bg-gray-300">
+    <nav class="py-3 px-4 bg-white backdrop-blur-lg shadow-sm bg-opacity-70 top-0 w-full flex items-center">
+        <div class="flex">
+            <img src="./chat.png" class="w-[40px]">
+            <div class="flex flex-col ml-2">
+                <h1 class="text-gray-600 font-semibold">Anonymous user</h1>
+                <p class="text-green-600 text-[12px] -mt-1" id="typing">Online</p>
+            </div>
+        </div>
+    </nav>
+    <ul class="max-h-[85vh] h-full w-full overflow-y-auto" id="messages"></ul>
+    <form id="form" class="fixed flex bottom-0 w-full bg-gray-200 p-3 shadow-sm">
         <input type="text" id="input" placeholder="Message..." autocomplete="off" required
-        class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out mr-3" >
-        <button type="submit" class="py-2 px-6 bg-blue-500 text-white rounded-lg">Send</button>
+        class="w-full bg-white rounded focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out mr-3">
+        <button type="submit" class="py-2 px-6 bg-blue-500 text-white rounded font-bold flex items-center"><span class="material-symbols-outlined mr-2">send</span>Send</button>
     </form>
 </body>
     <script src="/socket.io/socket.io.js"></script>
@@ -21,12 +32,23 @@
         let form = document.getElementById('form');
         let input = document.getElementById('input');
         let messages = document.getElementById('messages');
+        let typing = document.getElementById('typing');
+
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             if(input != ""){
                 socket.emit('chat', input.value);
                 input.value = ""
             }
+        });
+        input.addEventListener('keydown', (e) => {
+            socket.emit('typing', true);
+        });
+        socket.on('typing', (status) => {
+            typing.innerHTML = "Typing..."
+            setTimeout(() => {
+                typing.innerHTML = "Online"
+            }, 2000)
         });
         socket.on('chat', (message) => {
             let item = document.createElement('li');
