@@ -5,12 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Socket.Io | Chat App</title>
+    <link rel="stylesheet" href="./app.css">
 </head>
 <body>
     <ul id="messages"></ul>
-    <form id="form">
-        <input type="text" id="input" placeholder="Message...">
-        <button type="submit">Send</button>
+    <form id="form" class="fixed flex bottom-0 w-full bg-gray-200 p-3">
+        <input type="text" id="input" placeholder="Message..." autocomplete="off" required
+        class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out mr-3" >
+        <button type="submit" class="py-2 px-6 bg-blue-500 text-white rounded-lg">Send</button>
     </form>
 </body>
     <script src="/socket.io/socket.io.js"></script>
