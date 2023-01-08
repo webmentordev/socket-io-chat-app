@@ -33,6 +33,11 @@
         let input = document.getElementById('input');
         let messages = document.getElementById('messages');
         let typing = document.getElementById('typing');
+        let user_info = "";
+
+        socket.on('user_info', (user) => {
+            user_info = user;
+        });
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -41,18 +46,26 @@
                 input.value = ""
             }
         });
+
         input.addEventListener('keydown', (e) => {
             socket.emit('typing', true);
         });
+
         socket.on('typing', (status) => {
             typing.innerHTML = "Typing..."
             setTimeout(() => {
                 typing.innerHTML = "Online"
             }, 2000)
         });
-        socket.on('chat', (message) => {
+
+        socket.on('chat', (message, user) => {
             let item = document.createElement('li');
             item.textContent = message;
+            if(user === user_info){
+                item.classList.add('owner');
+            }else{
+                item.classList.add('sender');
+            }
             messages.appendChild(item);
             messages.scrollTo(0, messages.scrollHeight);
         });
