@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href="./chat.png" type="image/x-icon">
 </head>
 <body class="bg-gray-300">
-    <nav class="py-3 px-4 bg-white backdrop-blur-lg shadow-sm bg-opacity-70 top-0 w-full flex items-center">
+    <nav class="py-3 px-4 bg-white backdrop-blur-lg shadow-sm bg-opacity-70 top-0 w-full flex items-center justify-between">
         <div class="flex">
             <img src="./chat.png" class="w-[40px]">
             <div class="flex flex-col ml-2">
@@ -18,8 +18,11 @@
                 <p class="text-green-600 text-[12px] -mt-1" id="typing">Online</p>
             </div>
         </div>
+        <form action="/logout" method="post">
+            <button type="submit" class="py-2 px-5 bg-blue-600 rounded-md text-white font-semibold">Logout</button>
+        </form>
     </nav>
-    <ul class="max-h-[85vh] h-full w-full overflow-y-auto" id="messages"></ul>
+    <ul class="max-h-[85vh] h-full w-full overflow-y-auto block" id="messages"></ul>
     <form id="form" class="fixed flex bottom-0 w-full bg-gray-200 p-3 shadow-sm">
         <input type="text" id="input" placeholder="Message..." autocomplete="off" required
         class="w-full bg-white rounded focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out mr-3">
@@ -33,7 +36,7 @@
         let input = document.getElementById('input');
         let messages = document.getElementById('messages');
         let typing = document.getElementById('typing');
-        let user_info = "";
+        let user_info = null;
 
         socket.on('user_info', (user) => {
             user_info = user;
@@ -48,7 +51,7 @@
         });
 
         input.addEventListener('keydown', (e) => {
-            socket.emit('typing', true);
+            socket.emit('typing', true, user_info);
         });
 
         socket.on('typing', (status) => {
@@ -61,12 +64,13 @@
         socket.on('chat', (message, user) => {
             let item = document.createElement('li');
             item.textContent = message;
-            if(user === user_info){
+            if(user == user_info){
                 item.classList.add('owner');
             }else{
                 item.classList.add('sender');
             }
             messages.appendChild(item);
+            
             messages.scrollTo(0, messages.scrollHeight);
         });
     </script>
